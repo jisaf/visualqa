@@ -112,7 +112,10 @@ var express = require('express');
 var app = express();
 var BlinkDiff = require('blink-diff');
 const Pageres = require('pageres');
-var webshot = require('webshot');
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
  
 app.post('/compare', (req, res, next) => {
   console.log("got request", req.query, __dirname)
