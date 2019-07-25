@@ -115,7 +115,7 @@ const Pageres = require('pageres');
 var webshot = require('webshot');
  
 app.post('/compare', (req, res, next) => {
-  console.log("got request", req.query)
+  console.log("got request", req.query, __dirname)
 
   const input = req.query.input;
   const output = req.query.output;
