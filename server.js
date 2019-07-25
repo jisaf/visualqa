@@ -108,9 +108,14 @@ app.post('/url', (req, res, next) => {
 });
 
 
+var express = require('express');
+var app = express();
+var BlinkDiff = require('blink-diff');
 const Pageres = require('pageres');
+var webshot = require('webshot');
  
-app.post('/url2', (req, res, next) => {
+app.post('/compare', (req, res, next) => {
+  console.log("got request", req.query)
 
   const input = req.query.input;
   const output = req.query.output;
