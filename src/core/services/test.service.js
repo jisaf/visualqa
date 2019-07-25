@@ -1,23 +1,7 @@
-var express = require('express');
-var app = express();
 var BlinkDiff = require('blink-diff');
 // var urlToImage = require('url-to-image');
 var webshot = require('webshot');
 var sizeOf = require('image-size');
-
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
-
-// var diff = new BlinkDiff({
-//   imageAPath: '../images/good.png', // Use file-path
-//   imageBPath: '../images/bad.png',
-
-//   thresholdType: BlinkDiff.THRESHOLD_PERCENT,
-//   threshold: 0.01, // 1% threshold
-
-//   imageOutputPath: '../images/out.png'
-// });
 
 var urlDiff = function(invision, production, callback) {
   var options = {
@@ -29,10 +13,9 @@ var urlDiff = function(invision, production, callback) {
       width: 'all',
       height: 'all'
     },
-    renderDelay: 1000};
-  return webshot(invision, '../images/good.png', options, function(
-    err
-  ) {
+    renderDelay: 1000
+  };
+  return webshot(invision, '../images/good.png', options, function(err) {
     var imgSize = sizeOf('../images/good.png');
     var options = {
       screenSize: {
@@ -41,15 +24,17 @@ var urlDiff = function(invision, production, callback) {
       },
       shotSize: {
         height: 'all'
-      }};
+      }
+    };
     webshot(production, '../images/bad.png', options, function(err) {
       var diff = new BlinkDiff({
         imageAPath: '../images/good.png', // Use file-path
         imageBPath: '../images/bad.png',
-
+        // composition: false,
+        outputMaskRed: 0,
+        outputMaskBlue: 255, // Use blue for highlighting differences
         thresholdType: BlinkDiff.THRESHOLD_PERCENT,
         threshold: 0.01, // 1% threshold
-
         imageOutputPath: '../images/out.png'
       });
       callback(diff);
@@ -72,9 +57,11 @@ var urlDiff = function(invision, production, callback) {
 //   });
 // });
 
-app.post('/url', (req, res, next) => {
-  // const url = 'https://publicis.invisionapp.com/share/5XT1S7SZS8V#/screens/374597737_Side_Drawer';
-  const url = req.query.input;
+export const getResutl = (input, output) => {
+
+
+// const url = 'https://publicis.invisionapp.com/share/5XT1S7SZS8V#/screens/374597737_Side_Drawer';
+  // const url = req.query.input;
 
   // axios(url)
   // .then(response => {
@@ -85,16 +72,16 @@ app.post('/url', (req, res, next) => {
   // var regex = /(https?:\/\/.+invisionapp-cdn.+)/ig;
   // console.log(html.match(regex))
   // console.log(imageUrl);
-  urlDiff(url, req.query.output, function(diff) {
-    diff.run(function(error, result) {
+  urlDiff(input, output, function(diff) {
+    return diff.run(function(error, result) {
       if (error) {
-        res.send('fail');
+        console.log('fail');
         throw error;
       } else {
         console.log(diff.hasPassed(result.code) ? 'Passed' : 'Failed');
         console.log('Found ' + result.differences + ' differences.');
-        res.sendFile('/Users/jusisaf/dev/personal/VisualQA/images/out.png');
+        return '%PUBLIC_URL%/out.png';
       }
     });
   });
-});
+};

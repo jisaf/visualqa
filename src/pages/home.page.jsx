@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-
+import {observable} from 'mobx';
+import {getResult} from '../core/services/api.service';
 //style
 import '../styles/home.page.scss';
 
@@ -18,11 +19,51 @@ class HomePage extends Component {
 
     }
 
+    changeInputUrl = (e) => {
+        this.inputUrl = e.target.value;
+    };
+
+    changeOutputUrl = (e) => {
+        this.outputUrl = e.target.value;
+    };
+
+    handleButtonClick = () => {
+        getResult(encodeURIComponent(this.inputUrl), encodeURIComponent(this.outputUrl)).then((result)=>{
+        // getResult('http://lorempixel.com/400/400/', 'http://lorempixel.com/400/400/').then((result)=>{
+            this.image = `http://localhost:3000/images/out.png`
+        })
+    }
+
+
+    @observable inputUrl = 'https://visualqa.invisionapp.com/public/share/F3WTMT1UQ';
+    @observable outputUrl = 'http://localhost:3001';
+    @observable image = "http://lorempixel.com/400/400";
+
     render() {
         return (
             <section className="HomePage__wrapper">
-                <div>
-                    Put stuff here
+                <div className="row pt-4">
+                    <div className="col-6">
+                        <div className="p-3">
+                            <h1>Design With Confidence.</h1>
+                            Find your design disparities faster. Compare your designs with production results. Save time and design with happiness.
+                            <div className="p-3 bg-light">
+                                <h3>Try it out for free</h3>
+                                <h4>Enter the link to your design</h4>
+                                <input type="text" value={this.inputUrl} onChange={this.changeInputUrl}/>
+                                <h4>Enter the link to your website</h4>
+                                <input type="text" value={this.outputUrl} onChange={this.changeOutputUrl}/>
+                                <div>
+                                    <button className="btn btn-primary" onClick={this.handleButtonClick}>GET A REPORT</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-6">
+                        <div className="d-flex align-content-center justify-content-center">
+                            <img src={this.image}/>
+                        </div>
+                    </div>
                 </div>
             </section>
         )

@@ -23,6 +23,14 @@ class App extends Component {
       <Router history={history}>
         <Provider store={masterStore}>
           <main id="main-content">
+            <div id="header" className="navbar bg-primary d-flex">
+              <div className="">
+                VisualQA
+              </div>
+              <div className="ml-auto">
+                Upgrade Now - Go Pro
+              </div>
+            </div>
             <Switch>
               <Route exact path="/" component={HomePage} />
               <Route exact path="/404" component={() => <div>some 404 compnent</div>} />
