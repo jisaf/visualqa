@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const getResult = (input, output) => {
-  return axios.post('https://fcd2459a.ngrok.io/url2', null, {params: {
+  return axios.post('https://d05ca28e.ngrok.io/compare', null, {params: {
     input,
     output
   }})

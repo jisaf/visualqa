@@ -111,13 +111,18 @@
 var express = require('express');
 var app = express();
 var BlinkDiff = require('blink-diff');
+var cors = require('cors')
 const Pageres = require('pageres');
+
+app.use(cors());
+app.use('/images', express.static(__dirname + '/images'));
+
 
 app.listen(3000, () => {
   console.log('Server running on port 3000');
 });
  
-app.post('/compare', (req, res, next) => {
+app.post('/compare', cors(), (req, res, next) => {
   console.log("got request", req.query, __dirname)
 
   const input = req.query.input;
@@ -126,8 +131,8 @@ app.post('/compare', (req, res, next) => {
   let foo = async () => {
 
     await new Pageres({delay: 2})
-        .src(input, ['1440x1080'], {filename: 'input'})
-        .src(output, ['1440x1080'], {filename: 'output'})
+        .src(decodeURIComponent(input), ['1440x1080'], {filename: 'input'})
+        .src(decodeURIComponent(output), ['1440x1080'], {filename: 'output'})
         .dest(__dirname)
         .run();
   }
@@ -135,12 +140,12 @@ app.post('/compare', (req, res, next) => {
       var diff = new BlinkDiff({
         imageAPath: __dirname+'/input.png', // Use file-path
         imageBPath: __dirname+'/output.png',
-        // composition: false,
+        composition: false,
         outputMaskRed: 0,
         outputMaskBlue: 255, // Use blue for highlighting differences
         thresholdType: BlinkDiff.THRESHOLD_PERCENT,
         threshold: 0.01, // 1% threshold
-        imageOutputPath: __dirname+'/out.png'
+        imageOutputPath: __dirname+'/images/out.png'
       });
   
       diff.run(function(error, result) {
@@ -150,10 +155,8 @@ app.post('/compare', (req, res, next) => {
         } else {
           console.log(diff.hasPassed(result.code) ? 'Passed' : 'Failed');
           console.log('Found ' + result.differences + ' differences.');
-          res.sendFile(
-            '/Users/jusisaf/dev/personal/VisualQAs/out.png'
-          );
+          res.send('/images/out.png');
         }
       });
-    })
+    }).catch(err => {console.log("---------", err)})
 });

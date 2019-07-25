@@ -30,7 +30,7 @@ class HomePage extends Component {
     handleButtonClick = () => {
         getResult(encodeURIComponent(this.inputUrl), encodeURIComponent(this.outputUrl)).then((result)=>{
         // getResult('http://lorempixel.com/400/400/', 'http://lorempixel.com/400/400/').then((result)=>{
-            this.image = `http://localhost:3000/images/out.png`
+            this.image = `https://d05ca28e.ngrok.io/images/out.png`
         })
     }
 
