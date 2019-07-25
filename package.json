@@ -26,6 +26,7 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^4.1.2",
     "url-to-image": "^1.0.0",
+    "uuid": "^3.3.2",
     "webshot": "^0.18.0"
   },
   "scripts": {

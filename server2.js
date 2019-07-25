@@ -117,8 +117,8 @@ const uuid = require('uuid/v1');
 app.use(cors());
 app.use('/images', express.static(__dirname + '/images'));
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
+app.listen(4000, () => {
+  console.log('Server running on port 4000');
 });
 
 const appendHttp = str => {

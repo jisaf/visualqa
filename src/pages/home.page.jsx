@@ -4,6 +4,7 @@ import {observable} from 'mobx';
 import {getResult} from '../core/services/api.service';
 //style
 import '../styles/home.page.scss';
+import loader from '../loader.gif';
 
 //components
 
@@ -28,15 +29,17 @@ class HomePage extends Component {
     };
 
     handleButtonClick = () => {
+        this.image = {loader}
         getResult(encodeURIComponent(this.inputUrl), encodeURIComponent(this.outputUrl)).then((result)=>{
         // getResult('http://lorempixel.com/400/400/', 'http://lorempixel.com/400/400/').then((result)=>{
-            this.image = `https://d05ca28e.ngrok.io/images/out.png`
+            this.image = `https://cf12a713.ngrok.io${result.comparison}`
         })
+
     }
 
 
-    @observable inputUrl = 'https://visualqa.invisionapp.com/public/share/F3WTMT1UQ';
-    @observable outputUrl = 'http://localhost:3001';
+    @observable inputUrl = '';
+    @observable outputUrl = '';
     @observable image = "http://lorempixel.com/400/400";
 
     render() {
