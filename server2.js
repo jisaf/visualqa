@@ -139,19 +139,32 @@ app.post('/compare', cors(), (req, res, next) => {
   const outputFile = uuid();
   const comparisonFile = uuid();
 
-  let foo = async () => {
+  const getScreenShot = async (url, filename, resolution = '1440x1080') => {
     await new Pageres({delay: 2})
-      .src(decodeURIComponent(input), ['1440x1080'], {
-        filename: './images/' + inputFile
-      })
-      .src(decodeURIComponent(output), ['1440x1080'], {
-        filename: './images/' + outputFile
+      .src(decodeURIComponent(url), [resolution], {
+        filename: './images/' + filename
       })
       .dest(__dirname)
       .run();
-  };
-  foo()
-    .then(() => {
+  }
+
+  // let foo = async () => {
+  //   await new Pageres({delay: 2})
+  //     .src(decodeURIComponent(input), ['1440x1080'], {
+  //       filename: './images/' + inputFile
+  //     })
+  //     .src(decodeURIComponent(output), ['1440x1080'], {
+  //       filename: './images/' + outputFile
+  //     })
+  //     .dest(__dirname)
+  //     .run();
+  // };
+  (async () => {
+
+  await getScreenShot(input, inputFile);
+  await getScreenShot(output, outputFile);
+
+    // .then(() => {
       var diff = new BlinkDiff({
         imageAPath: __dirname + `/images/${inputFile}.png`, // Use file-path
         imageBPath: __dirname + `/images/${outputFile}.png`,
@@ -177,8 +190,9 @@ app.post('/compare', cors(), (req, res, next) => {
           });
         }
       });
-    })
-    .catch(err => {
-      console.log('---------', err);
-    });
+    })();
+    // })
+    // .catch(err => {
+    //   console.log('---------', err);
+    // });
 });

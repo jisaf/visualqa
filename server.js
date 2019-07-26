@@ -123,7 +123,9 @@ app.listen(3000, () => {
 
 const appendHttp = str => {
   const prefix = 'http://';
-  if (str.substr(0, prefix.length) !== prefix) {
+  const securePrefix = 'https://';
+  
+  if (str.substr(0, prefix.length) !== prefix && str.substr(0, securePrefix.length) !== securePrefix) {
     str = prefix + str;
   }
 
