@@ -153,7 +153,8 @@ app.post('/compare', cors(), (req, res, next) => {
     await captureWebsite.file(decodeURIComponent(url), __dirname + '/images/' + filename + '.png', {
       width: 1440,
       height: 1080,
-      delay: 1
+      delay: 1,
+      launchOptions: {args: ['--no-sandbox', '--disable-setuid-sandbox']}
     });
   }
 
