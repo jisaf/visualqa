@@ -32,7 +32,7 @@ class HomePage extends Component {
         this.image = {loader}
         getResult(encodeURIComponent(this.inputUrl), encodeURIComponent(this.outputUrl)).then((result)=>{
         // getResult('http://lorempixel.com/400/400/', 'http://lorempixel.com/400/400/').then((result)=>{
-            this.image = `https://cf12a713.ngrok.io${result.comparison}`
+            this.image = `https://cf12a713.ngrok.io:4000/${result.comparison}`
         })
 
     }

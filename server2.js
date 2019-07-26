@@ -111,7 +111,8 @@ var express = require('express');
 var app = express();
 var BlinkDiff = require('blink-diff');
 var cors = require('cors');
-const Pageres = require('pageres');
+// const Pageres = require('pageres');
+const captureWebsite = require('capture-website');
 const uuid = require('uuid/v1');
 
 app.use(cors());
@@ -123,7 +124,9 @@ app.listen(4000, () => {
 
 const appendHttp = str => {
   const prefix = 'http://';
-  if (str.substr(0, prefix.length) !== prefix) {
+  const securePrefix = 'https://';
+  
+  if (str.substr(0, prefix.length) !== prefix && str.substr(0, securePrefix.length) !== securePrefix) {
     str = prefix + str;
   }
 
@@ -140,12 +143,18 @@ app.post('/compare', cors(), (req, res, next) => {
   const comparisonFile = uuid();
 
   const getScreenShot = async (url, filename, resolution = '1440x1080') => {
-    await new Pageres({delay: 2})
-      .src(decodeURIComponent(url), [resolution], {
-        filename: './images/' + filename
-      })
-      .dest(__dirname)
-      .run();
+    console.log("checking", url)
+    // await new Pageres({delay: 2})
+    //   .src(decodeURIComponent(url), [resolution], {
+    //     filename: './images/' + filename
+    //   })
+    //   .dest(__dirname)
+    //   .run();
+    await captureWebsite.file(decodeURIComponent(url), __dirname + '/images/' + filename + '.png', {
+      width: 1440,
+      height: 1080,
+      delay: 1
+    });
   }
 
   // let foo = async () => {
@@ -196,3 +205,8 @@ app.post('/compare', cors(), (req, res, next) => {
     //   console.log('---------', err);
     // });
 });
+
+
+
+/// to fix missing chromium on digital ocean run the following:
+// sudo apt install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
